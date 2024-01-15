@@ -63,7 +63,7 @@ public class GameOfLife {
 		for(int i=0;i<board.length;i++)//setting zero all over the board
 			for(int j=0;j<board[0].length;j++)
 				board[i][j]=0;
-		int countline = 1;
+		int countline = 0;
 		String cells = in.readLine();
 		while(true)
 		{
@@ -82,7 +82,7 @@ public class GameOfLife {
 				{
 					if(cells.charAt(j)=='x')
 					{
-						board[countline][j+1]=1;
+						board[countline][j]=1;
 
 					}
 				}
