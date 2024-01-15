@@ -9,11 +9,8 @@ public class GameOfLife {
 
 	public static void main(String[] args) {
 		String fileName = args[0];
-		//// Uncomment the test that you want to execute, and re-compile.
-		//// (Run one test at a time).
-		//// test1(fileName);
-		//// test2(fileName);
 		//// test3(fileName, 3);
+		test1(fileName);
 		//// play(fileName);
 	}
 	
@@ -24,7 +21,7 @@ public class GameOfLife {
 	}
 		
 	// Reads the data file, and runs a test that checks 
-	// the count and cellValue functions.
+	// the  and cellValue functions.
 	private static void test2(String fileName) {
 		int[][] board = read(fileName);
 		//// Write here code that tests that the count and cellValue functions
@@ -43,7 +40,7 @@ public class GameOfLife {
 	}
 		
 	// Reads the data file and plays the game, for ever.
-	private static void play(String fileName) {
+	public static void play(String fileName) {
 		int[][] board = read(fileName);
 		while (true) {
 			show(board);
@@ -58,21 +55,70 @@ public class GameOfLife {
 	// and the rightmost columns. Thus the actual board is surrounded by a "frame" of zeros. You can think
 	// of this frame as representing the infinite number of dead cells that exist in every direction.
 	// This function assumes that the input file contains valid data, and does no input testing.
-	private static int[][] read(String fileName) {
+	public static int[][] read(String fileName) {
 		In in = new In(fileName); // Constructs an In object for reading the input file
 		int rows = Integer.parseInt(in.readLine());
 		int cols = Integer.parseInt(in.readLine());
 		int[][] board = new int[rows + 2][cols + 2];
-		//// Replace the following statement with your code.
-		return null;
+		for(int i=0;i<board.length;i++)//setting zero all over the board
+			for(int j=0;j<board[0].length;j++)
+				board[i][j]=0;
+		int countline = 1;
+		String cells = in.readLine();
+		while(true)
+		{
+			
+				if(cells.length()==0)
+				{
+					countline++;
+				}
+				else break;
+			cells = in.readLine();				
+		}
+		
+		while (cells!=null)//while there is text in the file
+			{
+				for(int j=0;j<cells.length();j++)
+				{
+					if(cells.charAt(j)=='x')
+					{
+						board[countline][j+1]=1;
+
+					}
+				}
+				countline++;
+					cells = in.readLine();
+			}
+		
+		return board;
 	}
 	
 	// Creates a new board from the given board, using the rules of the game.
 	// Uses the cellValue(board,i,j) function to compute the value of each 
 	// cell in the new board. Returns the new board.
-	private static int[][] evolve(int[][] board) {
-		//// Replace the following statement with your code.
-		return null;
+	public static int[][] evolve(int[][] board) 
+	{
+		int [][] newboard = new int [board.length][board[0].length];
+		for(int i=0;i<board[0].length;i++)//setting zero all over the frame 
+		{
+			newboard[0][i]=0;
+			newboard[board.length-1][i]=0;
+		}
+		for(int i=0;i<board.length;i++)
+		{
+			newboard[i][0]=0;
+			newboard[board[0].length-1][i]=0;
+		}
+		for (int i=1;i<board.length-1;i++)//running all over the arry except to the frame
+		{
+			for (int j=1;j<board[0].length-1;j++)
+			{
+				newboard[i][j] = cellValue(board, i, j);
+			}
+			
+		}
+		
+		return newboard;
 	}
 
 	// Returns the value that cell (i,j) should have in the next generation.
@@ -84,8 +130,23 @@ public class GameOfLife {
 	// Assumes that i is at least 1 and at most the number of rows in the board - 1. 
 	// Assumes that j is at least 1 and at most the number of columns in the board - 1. 
 	// Uses the count(board,i,j) function to count the number of alive neighbors.
-	private static int cellValue(int[][] board, int i, int j) {
-		//// Replace the following statement with your code.
+	public static int cellValue(int[][] board, int i, int j) 
+	{
+		int sumelivecell = count(board,i,j);
+		if(board[i][j]==1)//if the cell alive
+		{
+			if(sumelivecell<1||sumelivecell>3)//check if there is over 3 live cell or less than one
+				return 0;
+				if(sumelivecell==2||sumelivecell==3)//check if there is 2 or 3 live cell next to him
+					return 1;
+		}
+		if(board[i][j]==0)//check if the cell is dead
+		{
+			if(sumelivecell==3)//if there is 3 cell live next so the cell alive
+					return 1;
+						else return 0;
+					
+		}
 		return 0;
 	}
 	
@@ -93,14 +154,25 @@ public class GameOfLife {
 	// (The cell itself is not counted).
 	// Assumes that i is at least 1 and at most the number of rows in the board - 1. 
 	// Assumes that j is at least 1 and at most the number of columns in the board - 1. 
-	private static int count(int[][] board, int i, int j) {
+	public static int count(int[][] board, int i, int j) {
 		//// Replace the following statement with your code.
-		return 0;
+		return (board[i+1][j])+(board[i-1][j])+(board[i][j-1])+(board[i][j+1])+(board[i+1][j+1])+(board[i-1][j-1])+(board[i+1][j-1])+(board[i-1][j+1]);
 	}
 	
 	// Prints the board. Alive and dead cells are printed as 1 and 0, respectively.
-    private static void print(int[][] arr) {
-		//// Write your code here.
+    public static void print(int[][] arr) 
+    {
+    	
+    	for (int i=1;i<arr.length-1;i++)
+    	{
+    		for (int j=1;j<arr[0].length-1;j++)
+    		{
+    				System.out.print("  "+arr[i][j] );
+    		}
+    		System.out.println("");	
+
+    	}
+
 	}
 		
     // Displays the board. Living and dead cells are represented by black and white squares, respectively.
@@ -108,7 +180,7 @@ public class GameOfLife {
     // In order to handle any given board size, we scale the X and Y dimensions according to the board size.
     // This results in the following visual effect: The smaller the board, the larger the squares
 	// representing cells.
-	private static void show(int[][] board) {
+	public static void show(int[][] board) {
 		StdDraw.setCanvasSize(900, 900);
 		int rows = board.length;
 		int cols = board[0].length;
