@@ -82,7 +82,7 @@ public class GameOfLife {
 				{
 					if(cells.charAt(j)=='x')
 					{
-						board[countline][j]=1;
+						board[countline][j+1]=1;
 
 					}
 				}
