@@ -160,7 +160,7 @@ public class GameOfLife {
 	}
 	
 	// Prints the board. Alive and dead cells are printed as 1 and 0, respectively.
-    private static void print(int[][] arr) 
+    public void print(int[][] arr) 
     {
     	
     	for (int i=0;i<arr.length;i++)
